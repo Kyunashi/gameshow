@@ -15,10 +15,3 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
-/shelf/
-/workspace.xml
-.idea/
-.mvn/
-HELP.md
-mvnw
-mvnw.cmd
