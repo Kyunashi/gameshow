@@ -1,28 +1,33 @@
 package com.kyunashi.gameshow.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private Integer id;
+    private int userId;
 
-    @Column(name="username")
     private String username;
-    @Column(name="email")
-    private String email;
-    @Column(name="password_hash")
-    private String password_hash;
 
-    public Integer getId() {
-        return id;
+    private String email;
+
+    @Column(name="password_hash")
+    private String passwordHash;
+
+    // GEtters and SEtters
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -41,11 +46,11 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }
