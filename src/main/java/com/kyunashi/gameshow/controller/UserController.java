@@ -2,6 +2,7 @@ package com.kyunashi.gameshow.controller;
 
 import com.kyunashi.gameshow.model.User;
 import com.kyunashi.gameshow.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/api/users")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService userService;
+
+    private final UserService userService;
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<User> getAllUsers() {

@@ -1,5 +1,6 @@
 package com.kyunashi.gameshow.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,10 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
+    @Id
     private int userId;
 
     private String username;

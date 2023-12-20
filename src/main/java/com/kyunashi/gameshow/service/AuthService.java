@@ -1,23 +1,30 @@
 package com.kyunashi.gameshow.service;
 
+import com.kyunashi.gameshow.dto.LoginRequest;
 import com.kyunashi.gameshow.dto.RegisterRequest;
 import com.kyunashi.gameshow.model.User;
 import com.kyunashi.gameshow.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
 @Service
+@AllArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+
     @Transactional
     public boolean signup(RegisterRequest registerRequest) {
         if(userRepository.existsByUsername(registerRequest.getUsername())) return false;
@@ -32,4 +39,11 @@ public class AuthService {
         return true;
     }
 
+
+    public boolean login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        if (authenticate.isAuthenticated()) return true;
+        return false;
+    }
 }
