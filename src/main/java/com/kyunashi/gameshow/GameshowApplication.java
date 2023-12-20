@@ -9,6 +9,12 @@ public class GameshowApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GameshowApplication.class, args);
+
 	}
+
+
+
+
+
 
 }

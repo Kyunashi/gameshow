@@ -8,4 +8,5 @@ sqlserver:
 root:kyewroot - 
 port:3306
 service name: MySQL80
+services.msc
 workbench / service (programfiles mysql)
