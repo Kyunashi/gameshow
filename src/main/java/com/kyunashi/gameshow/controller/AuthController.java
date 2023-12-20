@@ -35,7 +35,7 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         boolean successful = authService.login(loginRequest);
         if(!successful) return new ResponseEntity<>("The Combination of password and username is incorrect", HttpStatus.CONFLICT);
-        return new ResponseEntity<>("Login Successful", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("Login Successful", HttpStatus.OK);
     }
 
 }
