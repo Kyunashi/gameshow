@@ -19,8 +19,13 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
-        authService.signup(registerRequest);
+
+        boolean successful = authService.signup(registerRequest);
+
+        if (!successful)  return new ResponseEntity<>("Username is already taken", HttpStatus.CONFLICT);;
+
         return new ResponseEntity<>("User Registration Successful", HttpStatus.OK);
+
     }
 
 }

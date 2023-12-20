@@ -19,8 +19,8 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
     @Transactional
-    public void signup(RegisterRequest registerRequest) {
-        if(userRepository.existsByUsername(registerRequest.getUsername())) return;
+    public boolean signup(RegisterRequest registerRequest) {
+        if(userRepository.existsByUsername(registerRequest.getUsername())) return false;
 
         User user = new User();
         user.setUsername(registerRequest.getUsername());
@@ -29,6 +29,7 @@ public class AuthService {
         user.setCreated(Instant.now());
         user.setEnabled(false);
         userRepository.save(user);
+        return true;
     }
 
 }
