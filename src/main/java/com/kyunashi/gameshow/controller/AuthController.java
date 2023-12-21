@@ -3,8 +3,9 @@ package com.kyunashi.gameshow.controller;
 import com.kyunashi.gameshow.dto.LoginRequest;
 import com.kyunashi.gameshow.dto.RegisterRequest;
 import com.kyunashi.gameshow.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        boolean successful = authService.login(loginRequest);
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+        boolean successful = authService.login(loginRequest, request, response);
         if(!successful) return new ResponseEntity<>("The Combination of password and username is incorrect", HttpStatus.CONFLICT);
         return new ResponseEntity<>("Login Successful", HttpStatus.OK);
     }

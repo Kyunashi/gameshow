@@ -18,6 +18,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -41,17 +45,28 @@ public class SecurityConfig {
 
         return providerManager;
     }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository(){
+        return new DelegatingSecurityContextRepository(
+                new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository());
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .userDetailsService(userDetailsService)
+                .securityContext((securityContext) -> securityContext
+                        .requireExplicitSave(true)
+                        .securityContextRepository(securityContextRepository()))
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/all").hasAuthority("USER")
                         .anyRequest().authenticated())
-//                .headers(headers -> headers.frameOptions().sameOrigin())
+//                .headers(headers -> headers.frameOptions().sameOrigin())   dont need?
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
