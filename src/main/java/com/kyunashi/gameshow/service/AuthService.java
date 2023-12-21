@@ -35,7 +35,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode((registerRequest.getPassword())));
         user.setEmail(registerRequest.getEmail());
         user.setCreated(Instant.now());
-        user.setEnabled(false);
+        user.setEnabled(true);
+        user.setRoles("USER");
         userRepository.save(user);
         return true;
     }
@@ -44,6 +45,7 @@ public class AuthService {
     public boolean login(LoginRequest loginRequest) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
+        authenticate.getAuthorities();
         //TODO print authorities, if authenticated is true here, why is it not stored anywhere?
         if (authenticate.isAuthenticated()) return true;
         return false;

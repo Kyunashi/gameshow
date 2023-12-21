@@ -25,10 +25,20 @@ public class User {
     @Column(name="password_hash")
     private String password;
 
+    private String roles;
+
+
     private Instant created;
 
     private boolean enabled;
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
     public Instant getCreated() {
         return created;
     }
@@ -77,5 +87,18 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles='" + roles + '\'' +
+                ", created=" + created +
+                ", enabled=" + enabled +
+                '}';
     }
 }
