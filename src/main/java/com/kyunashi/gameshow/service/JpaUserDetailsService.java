@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * service to provide UserDetails , uses Security user . This is used for authorization
+ */
 @AllArgsConstructor
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
@@ -23,19 +26,4 @@ public class JpaUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
     }
 
-//    @Override
-//    @Transactional(readOnly=true)
-//    public UserDetails loadUserByUsername(String username) {
-//
-//        Optional<User> userOpt = userRepository.findByUsername(username);
-//
-//        User user = userOpt.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-//
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-//                user.getPassword(), user.isEnabled(), true, true, true, getAuthorities("USER"));
-//    }
-//
-//    private Collection<? extends GrantedAuthority> getAuthorities(String role) {
-//        return Collections.singletonList(new SimpleGrantedAuthority(role));
-//    }
 }

@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO which is transmitted on login
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

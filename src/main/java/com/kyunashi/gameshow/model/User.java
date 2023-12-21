@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * Model for the users table of the database, contains data of each user
+ */
 @Entity
 @Table(name="users")
 @AllArgsConstructor

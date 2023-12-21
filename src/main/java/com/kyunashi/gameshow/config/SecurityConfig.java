@@ -23,6 +23,10 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
+/**
+ * Class to configure spring security rules which spring then inforces
+ * and provide utility like password encryption and user authentication aswell as logout so that spring can en
+ */
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
@@ -31,7 +35,12 @@ public class SecurityConfig {
 
     private final JpaUserDetailsService userDetailsService;
 
-
+    /**
+     *
+     * @param userDetailsService
+     * @param passwordEncoder
+     * @return manager to use for encoding of passwords and authentication of users
+     */
     @Bean
     public AuthenticationManager authenticationManager(
             UserDetailsService userDetailsService,
@@ -46,6 +55,10 @@ public class SecurityConfig {
         return providerManager;
     }
 
+    /**
+     * stores currently authenticated users using sessions
+     * @return repository containing these sessions / logins
+     */
     @Bean
     public SecurityContextRepository securityContextRepository(){
         return new DelegatingSecurityContextRepository(
@@ -53,6 +66,15 @@ public class SecurityConfig {
                 new HttpSessionSecurityContextRepository());
     }
 
+    /**
+     * Filter chain enforces security rules
+     * these rules are configured with this method
+     * inclues checking for authentication if needed, AUthorization if needed and enabling openly accessible entpoints
+     * deleting Cookies and the session once logged out
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -67,14 +89,19 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/all").hasAuthority("USER")
                         .anyRequest().authenticated())
 //                .headers(headers -> headers.frameOptions().sameOrigin())   dont need?
+                .logout(logout -> logout
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
 
 
-
-
+    /**
+     * password encoder can be used to encode user passwords on registration to store them in the database encrypted
+     * @return passwordencoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

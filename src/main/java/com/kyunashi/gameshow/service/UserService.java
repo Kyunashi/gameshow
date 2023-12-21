@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+/**
+ * service to grand utilities for accessing, changing and deleting user Data
+ * uses the userrepository which handles communication with the database
+ */
 @Service
 @AllArgsConstructor
 @CommonsLog

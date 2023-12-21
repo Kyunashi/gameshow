@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository to get User data from the users table utilizing JpaRepository which maps the request to actual sql requests that are used to query the database
+ * method names should be selfexplanatory
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 

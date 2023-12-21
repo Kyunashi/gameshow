@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * class maps user(class) data from database to the UserDetails which spring uses for authorization
+ */
 public class SecurityUser implements UserDetails {
 
     User user;
