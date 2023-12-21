@@ -3,8 +3,8 @@ package com.kyunashi.gameshow.controller;
 import com.kyunashi.gameshow.model.User;
 import com.kyunashi.gameshow.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +19,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     @GetMapping(path="/all")
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated())
+            ;
+
+
         return userService.getAllUsers();
+
     }
 
     @PreAuthorize("hasRole('ADMIN')")
