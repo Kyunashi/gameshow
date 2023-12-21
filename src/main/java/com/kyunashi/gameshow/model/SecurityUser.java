@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -55,5 +56,17 @@ public class SecurityUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public int getId(){
+        return user.getUserId();
+    }
+
+    public Instant getCreated() {
+        return user.getCreated();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
     }
 }

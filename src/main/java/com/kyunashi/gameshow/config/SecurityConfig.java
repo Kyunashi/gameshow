@@ -18,10 +18,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 /**
  * Class to configure spring security rules which spring then inforces
@@ -86,12 +88,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/all").hasAuthority("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/users/all").hasRole("ADMIN")
+                        .requestMatchers(RegexRequestMatcher.regexMatcher("/api/users/\\d{1,10}")).hasRole("USER")
                         .anyRequest().authenticated())
 //                .headers(headers -> headers.frameOptions().sameOrigin())   dont need?
                 .logout(logout -> logout
-                        .deleteCookies("JSESSIONID")
-                        .invalidateHttpSession(true))
+                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

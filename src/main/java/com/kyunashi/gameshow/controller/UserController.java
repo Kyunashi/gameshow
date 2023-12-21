@@ -1,17 +1,24 @@
 package com.kyunashi.gameshow.controller;
 
+import com.kyunashi.gameshow.dto.UserResponse;
+import com.kyunashi.gameshow.model.SecurityUser;
 import com.kyunashi.gameshow.model.User;
 import com.kyunashi.gameshow.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
 
 /**
  * Controller class to manage Endpoints regarding the user
@@ -37,8 +44,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User getUser(@PathVariable int userId) {
-        return userService.getUser(userId);
+    public  ResponseEntity<?> getUserById(@PathVariable("userId") Integer userId, Authentication authentication) {
+        int authenticatedUserId= ((SecurityUser) authentication.getPrincipal()).getId();
+           if(userId==authenticatedUserId) {
+               SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
+               UserResponse userResponse = new UserResponse(securityUser.getEmail(),securityUser.getUsername(), securityUser.getCreated());
+               return ResponseEntity.ok(userResponse);
+           }
+           return  ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
     }
 
 
