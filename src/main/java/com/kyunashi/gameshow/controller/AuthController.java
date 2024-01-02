@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * - login, creating user via signup, changing
  */
 @Controller
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {
 
@@ -37,8 +37,6 @@ public class AuthController {
         }
         authService.signup(signupRequest);
         return new ResponseEntity<>("Signup successful", HttpStatus.OK);
-
-
     }
 
     @PostMapping("/login")
