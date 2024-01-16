@@ -15,23 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class RallyController {
 
     private RallyService rallyService;
-    private RoomService roomService;
 
-    @PostMapping("/create")
-    public void createRoom(@RequestBody PlayerRequest playerRequest) {
-        Player player = new Player(playerRequest.getPlayerId(), playerRequest.getName(),playerRequest.getColor());
-        roomService.createRoom(player);
-        // return Join Link
-
-    }
 
     @GetMapping("/start")
     public void startRally(){
 
     }
 
-    @GetMapping("/join")
-    public void joinRoom(){
 
-    }
 }

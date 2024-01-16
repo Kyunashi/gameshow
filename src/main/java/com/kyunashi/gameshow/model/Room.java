@@ -5,25 +5,25 @@ import java.util.List;
 
 public class Room {
 
-    private List<Rally> playedRallies;
-    private Rally activeRally;
+
     private String roomId;
 
-    private Player director;
+    private List<Player> players;
+
+    private Player gamemaster;
+
+    private Player owner;
+
+    private List<Integer> minigames;
 
     public Room(String roomId, Player director) {
         this.roomId = roomId;
-        playedRallies = new ArrayList<>();
-        this.director = director;
+        this.owner = director;
+        this.players = new ArrayList<>();
+        this.minigames = new ArrayList<>();
     }
 
-    public Rally getActiveRally() {
-        return activeRally;
-    }
 
-    public void setActiveRally(Rally activeRally) {
-        this.activeRally = activeRally;
-    }
 
     public String getRoomId() {
         return roomId;
@@ -33,8 +33,17 @@ public class Room {
         this.roomId = roomId;
     }
 
-    public void addRally(Rally rally) {
-        playedRallies.add(rally);
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
 
