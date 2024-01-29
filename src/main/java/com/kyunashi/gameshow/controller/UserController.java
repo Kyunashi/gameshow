@@ -55,7 +55,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/{userId}/update")
+    @PostMapping("/update/{userId}")
     public void updateUser() {
 
     }

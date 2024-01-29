@@ -35,8 +35,12 @@ public class RoomService {
         room.addPlayer(player);
     }
 
-//    public Room GetRoomById(String id) {
-//
-//        return rooms.get(id);
-//    }
+    public boolean deleteRoom(String roomId) {
+        if (rooms.containsKey(roomId)) {
+            rooms.remove(roomId);
+            return true;
+        }
+        return false;
+    }
+
 }

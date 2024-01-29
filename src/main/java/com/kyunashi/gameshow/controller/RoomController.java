@@ -10,14 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/room")
+@RequestMapping("/api/room")
 public class RoomController {
 
     private RoomService roomService;
@@ -33,7 +30,7 @@ public class RoomController {
 
     }
 
-    @GetMapping("/join")
+    @PostMapping("/join/{roomId}")
     public ResponseEntity<String> joinRoom(@RequestBody JoinRequest joinRequest){
 
         roomService.joinRoom(joinRequest);
@@ -41,7 +38,14 @@ public class RoomController {
     }
 
 
-
+    @PostMapping("/delete/{roomId}")
+    public ResponseEntity<String> deleteRoom(@RequestParam String roomId) {
+        boolean deleted = roomService.deleteRoom(roomId);
+        if(!deleted) {
+            return new ResponseEntity<>("No room found with id " + roomId, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Room Deleted", HttpStatus.OK);
+    }
     @GetMapping("/{roomId}")
     public void getRoom() {
 
