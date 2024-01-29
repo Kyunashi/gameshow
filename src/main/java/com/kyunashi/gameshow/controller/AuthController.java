@@ -44,7 +44,7 @@ public class AuthController {
         boolean successful = authService.login(loginRequest, request, response);
         if (!successful)
             return new ResponseEntity<>("The Combination of password and username is incorrect", HttpStatus.CONFLICT);
-        return new ResponseEntity<>("Login Successful", HttpStatus.OK);
+        return new ResponseEntity<>("Login Successful for username " + loginRequest.getUsername(), HttpStatus.OK);
     }
 
 

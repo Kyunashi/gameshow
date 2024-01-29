@@ -3,7 +3,7 @@ package com.kyunashi.gameshow.dto;
 public class PlayerRequest {
 
     String name;
-    String playerId;
+
     String color;
 
 
@@ -13,14 +13,6 @@ public class PlayerRequest {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
     }
 
     public String getColor() {

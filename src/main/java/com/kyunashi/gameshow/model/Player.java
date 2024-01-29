@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 
 public class Player {
 
-    public Player(String playerId, String name, String color) {
-        this.playerId = playerId;
+    public Player(int playerNumber, String name, String color) {
+        this.playerNumber = playerNumber;
         this.name = name;
         this.color = color;
     }
@@ -13,7 +13,7 @@ public class Player {
     public Player() {
     }
 
-    private String playerId;
+    private int playerNumber;
     private String name;
 
     private String color;
@@ -32,5 +32,13 @@ public class Player {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 }

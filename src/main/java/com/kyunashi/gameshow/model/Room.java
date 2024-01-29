@@ -16,9 +16,9 @@ public class Room {
 
     private List<Integer> minigames;
 
-    public Room(String roomId, Player director) {
+    public Room(String roomId, Player owner) {
         this.roomId = roomId;
-        this.owner = director;
+        this.owner = owner;
         this.players = new ArrayList<>();
         this.minigames = new ArrayList<>();
     }
@@ -44,6 +44,11 @@ public class Room {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public void addPlayer(Player player) {
+        this.players.add(player);
+
     }
 
 
