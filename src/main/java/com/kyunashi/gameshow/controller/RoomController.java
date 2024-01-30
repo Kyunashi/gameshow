@@ -1,13 +1,13 @@
 package com.kyunashi.gameshow.controller;
 
 
-import com.kyunashi.gameshow.dto.JoinRequest;
 import com.kyunashi.gameshow.dto.PlayerRequest;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.service.RoomService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +31,15 @@ public class RoomController {
     }
 
     @GetMapping("/join/{roomId}")
-    public ResponseEntity<String> joinRoom(@RequestBody JoinRequest joinRequest){
+    public ResponseEntity<String> joinRoom(@PathVariable String roomId, @RequestBody PlayerRequest playerRequest, HttpServletRequest req, HttpServletResponse res){
 
-        roomService.joinRoom(joinRequest);
-        return new ResponseEntity<>("Player " +joinRequest.getPlayerName() + "joined room " + joinRequest.getRoomId(), HttpStatus.OK);
+        roomService.joinRoom(playerRequest, roomId);
+        return new ResponseEntity<>("Player " +playerRequest.getName() + "joined room " + roomId, HttpStatus.OK);
     }
 
 
     @PostMapping("/delete/{roomId}")
-    public ResponseEntity<String> deleteRoom(@RequestParam String roomId) {
+    public ResponseEntity<String> deleteRoom(@PathVariable String roomId) {
         boolean deleted = roomService.deleteRoom(roomId);
         if(!deleted) {
             return new ResponseEntity<>("No room found with id " + roomId, HttpStatus.BAD_REQUEST);
@@ -48,7 +48,7 @@ public class RoomController {
     }
     @GetMapping("/{roomId}")
     public void getRoom() {
-
+        // do i even need this?
     }
 
 }

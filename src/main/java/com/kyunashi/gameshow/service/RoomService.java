@@ -1,6 +1,6 @@
 package com.kyunashi.gameshow.service;
 
-import com.kyunashi.gameshow.dto.JoinRequest;
+import com.kyunashi.gameshow.dto.PlayerRequest;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.model.Room;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -28,10 +28,10 @@ public class RoomService {
 
     }
 
-    public void joinRoom(JoinRequest joinRequest) {
+    public void joinRoom(PlayerRequest playerRequest, String roomId) {
 
-        Room room = rooms.get(joinRequest.getRoomId());
-        Player player = new Player(rooms.size() + 1,joinRequest.getPlayerName(), joinRequest.getColor() );
+        Room room = rooms.get(roomId);
+        Player player = new Player(rooms.size() + 1,playerRequest.getName(), playerRequest.getColor() );
         room.addPlayer(player);
     }
 
