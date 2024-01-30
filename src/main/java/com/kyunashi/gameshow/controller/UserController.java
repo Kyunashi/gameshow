@@ -45,10 +45,17 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public  ResponseEntity<?> getUserById(@PathVariable("userId") Integer userId, Authentication authentication) {
-        int authenticatedUserId= ((SecurityUser) authentication.getPrincipal()).getId();
-           if(userId==authenticatedUserId) {
-               SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-               UserResponse userResponse = new UserResponse(securityUser.getEmail(),securityUser.getUsername(), securityUser.getCreated());
+
+        SecurityUser secUser = ((SecurityUser) authentication.getPrincipal());
+        int authenticatedUserId= secUser.getId();
+
+           if(secUser.hasAuthority("ROLE_ADMIN") || userId==authenticatedUserId) {
+
+             if(!userService.existsByUserId(userId)) {
+                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User found with id " + userId);
+             }
+               User wantedUser = userService.getUser(userId);
+               UserResponse userResponse = new UserResponse(wantedUser.getEmail(),wantedUser.getUsername(), wantedUser.getCreated());
                return ResponseEntity.ok(userResponse);
            }
            return  ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");

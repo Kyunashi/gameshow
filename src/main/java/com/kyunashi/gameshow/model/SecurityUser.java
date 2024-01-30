@@ -19,6 +19,7 @@ public class SecurityUser implements UserDetails {
         this.user = user;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(user
@@ -62,6 +63,9 @@ public class SecurityUser implements UserDetails {
         return user.getUserId();
     }
 
+    public boolean hasAuthority(String authority) {
+        return getAuthorities().contains(new SimpleGrantedAuthority(authority));
+    }
     public Instant getCreated() {
         return user.getCreated();
     }

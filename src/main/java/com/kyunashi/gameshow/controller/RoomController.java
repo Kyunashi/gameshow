@@ -30,7 +30,7 @@ public class RoomController {
 
     }
 
-    @PostMapping("/join/{roomId}")
+    @GetMapping("/join/{roomId}")
     public ResponseEntity<String> joinRoom(@RequestBody JoinRequest joinRequest){
 
         roomService.joinRoom(joinRequest);

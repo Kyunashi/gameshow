@@ -89,6 +89,8 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/room/create", "/api/room/join").permitAll()
+                        //TODO ROOM DELETION, check if room owner?? (or frontendtask?)
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/users/\\d{1,10}")).hasRole("USER")
                         .anyRequest().authenticated())
 //                .headers(headers -> headers.frameOptions().sameOrigin())   dont need?
