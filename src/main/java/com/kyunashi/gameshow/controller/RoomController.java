@@ -4,6 +4,7 @@ package com.kyunashi.gameshow.controller;
 import com.kyunashi.gameshow.dto.PlayerRequest;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.service.RoomService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class RoomController {
     // maybe leave this for frontend? idk
     // ALSO duplicate names? allowed or not
     @PostMapping("/create")
-    public ResponseEntity<String> createRoom(@RequestBody PlayerRequest playerRequest) {
+    public ResponseEntity<String> createRoom(@RequestBody PlayerRequest playerRequest, HttpServletResponse res) {
         Player owner = new Player(1, playerRequest.getName(),playerRequest.getColor());
         String roomId = roomService.createRoom(owner);
         return new ResponseEntity<>(roomId, HttpStatus.OK);
@@ -32,7 +33,6 @@ public class RoomController {
 
     @GetMapping("/join/{roomId}")
     public ResponseEntity<String> joinRoom(@PathVariable String roomId, @RequestBody PlayerRequest playerRequest, HttpServletRequest req, HttpServletResponse res){
-
         roomService.joinRoom(playerRequest, roomId);
         return new ResponseEntity<>("Player " +playerRequest.getName() + "joined room " + roomId, HttpStatus.OK);
     }
@@ -50,5 +50,6 @@ public class RoomController {
     public void getRoom() {
         // do i even need this?
     }
+
 
 }

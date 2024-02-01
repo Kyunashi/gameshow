@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="minigames")
-@AllArgsConstructor
-@NoArgsConstructor
+//@Entity
+//@Table(name="minigames")
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class Minigame {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="minigame_id")
-    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name="minigame_id")
+//    @Id
     private int minigameId;
 
     private String description;

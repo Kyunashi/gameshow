@@ -17,14 +17,14 @@ public class RoomService {
     Map<String, Room> rooms = new HashMap();
     public String createRoom(Player owner) {
         String roomId = RandomStringUtils.randomAlphanumeric(10);
-        Room room = new Room(roomId, owner);
 
-        if(!rooms.keySet().contains(roomId)) {
-            rooms.put(roomId, room);
-            return roomId;
+        while(rooms.containsKey(roomId)) {
+            roomId = RandomStringUtils.randomAlphanumeric(10);
         }
-        // TODO EDGECASE PREVENTION (repaet if id was ins keyset)
-        return "";
+        Room room = new Room(roomId, owner);
+        rooms.put(roomId, room);
+
+        return roomId;
 
     }
 
@@ -42,5 +42,6 @@ public class RoomService {
         }
         return false;
     }
+
 
 }

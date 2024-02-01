@@ -1,17 +1,17 @@
 package com.kyunashi.gameshow.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name="players")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Player {
 
-    public Player(int playerNumber, String name, String color) {
-        this.playerNumber = playerNumber;
-        this.name = name;
-        this.color = color;
-    }
 
-    public Player() {
-    }
 
     private int playerNumber;
     private String name;
