@@ -19,6 +19,7 @@ public class Room {
     public Room(String roomId, Player owner) {
         this.roomId = roomId;
         this.owner = owner;
+        this.gamemaster = owner;
         this.players = new ArrayList<>();
         this.minigames = new ArrayList<>();
     }

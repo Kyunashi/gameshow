@@ -5,8 +5,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name="players")
+//@Entity
+//@Table(name="players")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Player {

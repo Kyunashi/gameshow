@@ -1,10 +1,9 @@
 package com.kyunashi.gameshow.controller;
 
 
-import com.kyunashi.gameshow.dto.PlayerRequest;
+import com.kyunashi.gameshow.dto.PlayerDto;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.service.RoomService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -24,27 +23,28 @@ public class RoomController {
     // maybe leave this for frontend? idk
     // ALSO duplicate names? allowed or not
     @PostMapping("/create")
-    public ResponseEntity<String> createRoom(@RequestBody PlayerRequest playerRequest, HttpServletResponse res) {
-        Player owner = new Player(1, playerRequest.getName(),playerRequest.getColor());
-        String roomId = roomService.createRoom(owner);
-        return new ResponseEntity<>(roomId, HttpStatus.OK);
+    public ResponseEntity<String> createRoom(@RequestBody PlayerDto playerDto, HttpServletResponse res) {
+        Player owner = new Player(1, playerDto.getName(), playerDto.getColor());
+        String roomId = roomService.createRoom(owner);// TODO return room / roomresponse
+        return ResponseEntity.status(HttpStatus.OK).body(roomId);
 
     }
 
     @GetMapping("/join/{roomId}")
-    public ResponseEntity<String> joinRoom(@PathVariable String roomId, @RequestBody PlayerRequest playerRequest, HttpServletRequest req, HttpServletResponse res){
-        roomService.joinRoom(playerRequest, roomId);
-        return new ResponseEntity<>("Player " +playerRequest.getName() + "joined room " + roomId, HttpStatus.OK);
+    public ResponseEntity<String> joinRoom(@PathVariable String roomId, @RequestBody PlayerDto playerDto, HttpServletRequest req, HttpServletResponse res){
+        roomService.joinRoom(playerDto, roomId);
+        return ResponseEntity.status(HttpStatus.OK ).body("Player " + playerDto.getName() + "joined room " + roomId);
     }
 
 
     @PostMapping("/delete/{roomId}")
-    public ResponseEntity<String> deleteRoom(@PathVariable String roomId) {
+    public ResponseEntity<?> deleteRoom(@PathVariable String roomId) {
         boolean deleted = roomService.deleteRoom(roomId);
         if(!deleted) {
             return new ResponseEntity<>("No room found with id " + roomId, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Room Deleted", HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body("Room Deleted");
+        //TODO ROOM DELETION, check if room owner?? (or frontendtask?)
     }
     @GetMapping("/{roomId}")
     public void getRoom() {

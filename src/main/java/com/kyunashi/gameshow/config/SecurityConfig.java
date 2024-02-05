@@ -92,7 +92,6 @@ public class SecurityConfig {
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/room/join/[a-zA-Z0-9]{10}")).permitAll()
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/room/delete/[a-zA-Z0-9]{10}")).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/all").hasRole("ADMIN")
-                        //TODO ROOM DELETION, check if room owner?? (or frontendtask?)
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/users/\\d{1,10}")).hasRole("USER")
                         .anyRequest().authenticated())
 //                .headers(headers -> headers.frameOptions().sameOrigin())   dont need?
