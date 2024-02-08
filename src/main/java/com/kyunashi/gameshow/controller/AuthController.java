@@ -27,9 +27,10 @@ public class AuthController {
     @PostMapping("/signup")
     public void signup(@RequestBody SignupRequest signupRequest, HttpServletResponse response) {
 
-
+        // TODO change --> t ocheck in controller and return boolean
         if (userService.existsByUsername(signupRequest.getUsername())) {
             response.setStatus(409);
+            return;
         }
         authService.signup(signupRequest);
         response.setStatus(200);
@@ -40,6 +41,7 @@ public class AuthController {
         boolean successful = authService.login(loginRequest, request, response);
         if (!successful) {
             response.setStatus(409);
+            return;
         }
         response.setStatus(200);
     }

@@ -18,11 +18,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -41,6 +43,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JpaUserDetailsService userDetailsService;
+
 
     /**
      *
@@ -80,6 +83,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -96,6 +100,7 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.ALL));
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -112,9 +117,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users/all").hasRole("ADMIN")
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/users/\\d{1,10}")).hasRole("USER")
                         .anyRequest().authenticated())
-//                .headers(headers -> headers.frameOptions().sameOrigin())   dont need?
+                .logout((logout) -> logout
+                        .logoutUrl("/api/auth/logout"))
                 .logout(logout -> logout
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
+                .logout(logout -> logout.addLogoutHandler(clearSiteData))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
