@@ -2,7 +2,9 @@ package com.kyunashi.gameshow.config;
 
 import com.kyunashi.gameshow.service.JpaUserDetailsService;
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.Cookie;
 import lombok.AllArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,6 +40,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableWebSecurity
+@CommonsLog
 @AllArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -100,7 +103,6 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.ALL));
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -118,10 +120,9 @@ public class SecurityConfig {
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/users/\\d{1,10}")).hasRole("USER")
                         .anyRequest().authenticated())
                 .logout((logout) -> logout
-                        .logoutUrl("/api/auth/logout"))
-                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .deleteCookies("JSESSIONID")
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
-                .logout(logout -> logout.addLogoutHandler(clearSiteData))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
