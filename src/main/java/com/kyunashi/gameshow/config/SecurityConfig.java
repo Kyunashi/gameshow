@@ -80,11 +80,16 @@ public class SecurityConfig {
     }
 
 
+    /**
+     * spring configuration that enables cors and permits certains domains/ips to connect
+     * also configures methods, allowed headers and credential allowance
+     * @return configuration which is used in the security filter chain
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://192.168.178.42:[*]", "http://localhost:[*]", "http://192.168.178.24:[*]", "192.168.178.24:[*]"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
