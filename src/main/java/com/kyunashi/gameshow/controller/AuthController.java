@@ -21,18 +21,16 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
 
     @PostMapping("/signup")
     public void signup(@RequestBody SignupRequest signupRequest, HttpServletResponse response) {
 
-        // TODO change --> t ocheck in controller and return boolean
-        if (userService.existsByUsername(signupRequest.getUsername())) {
+        boolean successful = authService.signup(signupRequest);
+        if (!successful) {
             response.setStatus(409);
             return;
         }
-        authService.signup(signupRequest);
         response.setStatus(200);
     }
 

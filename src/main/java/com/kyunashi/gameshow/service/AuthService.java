@@ -43,14 +43,16 @@ public class AuthService {
 
     @Transactional
     public boolean signup(SignupRequest signupRequest) {
-
+        if (userRepository.existsByUsername(signupRequest.getUsername())) {
+            return false;
+        }
         User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setPassword(passwordEncoder.encode((signupRequest.getPassword())));
         user.setEmail(signupRequest.getEmail());
         user.setCreated(Instant.now());
         user.setEnabled(true);
-        user.setRoles("USER");
+        user.setRoles("ROLE_USER");
         userRepository.save(user);
         return true;
     }
