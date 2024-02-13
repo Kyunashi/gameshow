@@ -28,6 +28,7 @@ import java.time.Instant;
  */
 @Controller
 @RequestMapping("/api/users")
+@CrossOrigin
 @AllArgsConstructor
 public class UserController {
 
@@ -61,6 +62,14 @@ public class UserController {
            return  ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        SecurityUser securityUser = ((SecurityUser) authentication.getPrincipal());
+        int authenticatedUserId= securityUser.getId();
+        User currentUser = userService.getUser(authenticatedUserId);
+        UserResponse userResponse = new UserResponse(currentUser.getEmail(),currentUser.getUsername(), currentUser.getCreated());
+        return ResponseEntity.ok(userResponse);
+    }
 
     @PostMapping("/update/{userId}")
     public void updateUser() {

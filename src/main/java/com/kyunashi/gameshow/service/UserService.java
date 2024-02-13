@@ -30,6 +30,8 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
+
+
     public boolean existsByUserId(int id) { return userRepository.existsByUserId(id);}
 
 
