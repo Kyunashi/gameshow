@@ -9,10 +9,17 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
+public class UserDto {
 
-    String email, username;
-    Instant created;
+    String  username, email, playername;
+
+    public String getPlayername() {
+        return playername;
+    }
+
+    public void setPlayername(String playername) {
+        this.playername = playername;
+    }
 
     public String getEmail() {
         return email;
@@ -30,11 +37,4 @@ public class UserResponse {
         this.username = username;
     }
 
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
-    }
 }

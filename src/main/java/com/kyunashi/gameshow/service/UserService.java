@@ -1,5 +1,6 @@
 package com.kyunashi.gameshow.service;
 
+import com.kyunashi.gameshow.dto.UserDto;
 import com.kyunashi.gameshow.model.User;
 import com.kyunashi.gameshow.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -35,4 +36,18 @@ public class UserService {
     public boolean existsByUserId(int id) { return userRepository.existsByUserId(id);}
 
 
+    public boolean updateUser(int userId, UserDto userDto) {
+
+        User user = userRepository.findById(userId).get();
+        boolean usernameUnchanged = user.getUsername().equals(userDto.getUsername());
+
+        if(usernameUnchanged || !userRepository.existsByUsername(userDto.getUsername())) {
+            user.setEmail(userDto.getEmail());
+            user.setPlayerName(userDto.getPlayername());
+            user.setUsername(userDto.getUsername());
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 }

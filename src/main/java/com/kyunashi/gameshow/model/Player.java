@@ -12,8 +12,16 @@ import lombok.NoArgsConstructor;
 public class Player {
 
 
+    int playerNumber;
 
-    private int playerNumber;
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
     private String name;
 
     private String color;
@@ -34,11 +42,5 @@ public class Player {
         this.color = color;
     }
 
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
 
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
-    }
 }

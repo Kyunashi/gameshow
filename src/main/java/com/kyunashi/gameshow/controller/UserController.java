@@ -1,24 +1,20 @@
 package com.kyunashi.gameshow.controller;
 
-import com.kyunashi.gameshow.dto.UserResponse;
+import com.kyunashi.gameshow.dto.UserDto;
 import com.kyunashi.gameshow.model.SecurityUser;
 import com.kyunashi.gameshow.model.User;
 import com.kyunashi.gameshow.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
+import java.net.http.HttpResponse;
 
 /**
  * Controller class to manage Endpoints regarding the user
@@ -28,6 +24,7 @@ import java.time.Instant;
  */
 @Controller
 @RequestMapping("/api/users")
+@CommonsLog
 @CrossOrigin
 @AllArgsConstructor
 public class UserController {
@@ -48,7 +45,7 @@ public class UserController {
     public  ResponseEntity<?> getUserById(@PathVariable("userId") Integer userId, Authentication authentication) {
 
         SecurityUser secUser = ((SecurityUser) authentication.getPrincipal());
-        int authenticatedUserId= secUser.getId();
+        int authenticatedUserId = secUser.getId();
 
            if(secUser.hasAuthority("ROLE_ADMIN") || userId==authenticatedUserId) {
 
@@ -56,8 +53,8 @@ public class UserController {
                  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No User found with id " + userId);
              }
                User wantedUser = userService.getUser(userId);
-               UserResponse userResponse = new UserResponse(wantedUser.getEmail(),wantedUser.getUsername(), wantedUser.getCreated());
-               return ResponseEntity.ok(userResponse);
+               UserDto userDto = new UserDto(wantedUser.getEmail(),wantedUser.getUsername(), wantedUser.getPlayerName());
+               return ResponseEntity.ok(userDto);
            }
            return  ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
     }
@@ -65,15 +62,25 @@ public class UserController {
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentUser(Authentication authentication) {
         SecurityUser securityUser = ((SecurityUser) authentication.getPrincipal());
-        int authenticatedUserId= securityUser.getId();
+        int authenticatedUserId = securityUser.getId();
         User currentUser = userService.getUser(authenticatedUserId);
-        UserResponse userResponse = new UserResponse(currentUser.getEmail(),currentUser.getUsername(), currentUser.getCreated());
-        return ResponseEntity.ok(userResponse);
+        UserDto userDto = new UserDto(currentUser.getEmail(),currentUser.getUsername(), currentUser.getPlayerName());
+        return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/update/{userId}")
-    public void updateUser() {
-
+    @PostMapping("/update/data")
+    public void updateUser(@RequestBody UserDto userDto , Authentication authentication, HttpServletResponse response) {
+        SecurityUser securityUser = ((SecurityUser) authentication.getPrincipal());
+        int authenticatedUserId = securityUser.getId();
+        boolean dataChanged = userService.updateUser(authenticatedUserId, userDto);
+        if(dataChanged) {
+            response.setStatus(200);
+            return;
+        } else {
+            response.setStatus(409);
+        }
     }
+
+
 
 }

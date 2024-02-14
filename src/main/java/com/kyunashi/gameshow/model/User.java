@@ -28,13 +28,22 @@ public class User {
     @Column(name="password_hash")
     private String password;
 
-    private String roles;
+    @Column(name="player_name")
+    private String playerName;
 
+    private String roles;
 
     private Instant created;
 
     private boolean enabled;
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
     public String getRoles() {
         return roles;
     }
