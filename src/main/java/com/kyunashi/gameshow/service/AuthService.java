@@ -36,8 +36,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
-
-
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
     private final SecurityContextRepository securityContextRepository;
 
@@ -58,11 +56,11 @@ public class AuthService {
     }
 
 
-    public boolean login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
+    public void login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(token);
-        // TODO questionalbe?, get current context?
+        // will return error 403 forbidden here if wrong credentials
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         securityContextHolderStrategy.setContext(context);
@@ -70,7 +68,5 @@ public class AuthService {
 
         log.info("LOGGED IN WITH AUTHORITIES: " + authentication.getAuthorities());
 
-        if (authentication.isAuthenticated()) return true;
-        return false;
     }
 }

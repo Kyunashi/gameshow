@@ -36,11 +36,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
-        boolean successful = authService.login(loginRequest, request, response);
-        if (!successful) {
-            response.setStatus(409);
-            return;
-        }
+        authService.login(loginRequest, request, response);
         response.setStatus(200);
     }
 

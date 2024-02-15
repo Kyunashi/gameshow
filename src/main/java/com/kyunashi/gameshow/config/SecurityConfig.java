@@ -123,11 +123,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/update").hasRole("USER")
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/users/\\d{1,10}")).hasRole("USER")
                         .anyRequest().authenticated())
-                .logout((logout) -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .deleteCookies("JSESSIONID")
-                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
-                .httpBasic(Customizer.withDefaults());
+                        .logout((logout) -> logout
+                                .logoutUrl("/api/auth/logout")
+                                .deleteCookies("JSESSIONID")
+                                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+                        );
 
         return http.build();
     }
