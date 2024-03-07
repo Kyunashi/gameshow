@@ -14,6 +14,7 @@ import org.springframework.web.util.HtmlUtils;
 public class MessageController {
 
     @MessageMapping("/app")
+    @SendTo("/room/greetings")
     public ResponseMessage handle(ReceiveMessage receiveMessage)  {
         return new ResponseMessage("Hello, " + HtmlUtils.htmlEscape(receiveMessage.getName()) + "!");
     }

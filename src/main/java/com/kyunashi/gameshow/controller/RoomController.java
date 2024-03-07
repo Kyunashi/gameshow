@@ -30,6 +30,7 @@ public class RoomController {
 
     }
 
+    // TODO DONT NEED THIS ANYMORE
     @GetMapping("/join/{roomId}")
     public ResponseEntity<String> joinRoom(@PathVariable String roomId, @RequestBody PlayerDto playerDto, HttpServletRequest req, HttpServletResponse res){
         roomService.joinRoom(playerDto, roomId);
