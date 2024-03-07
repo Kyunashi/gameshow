@@ -1,12 +1,15 @@
 package com.kyunashi.gameshow.socket;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResponseMessage {
 
     public String content;
-
-    public ResponseMessage(String content) {
-        this.content = content;
-    }
 
     public String getContent() {
         return content;
