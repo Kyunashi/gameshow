@@ -118,7 +118,7 @@ public class SecurityConfig implements WebSocketMessageBrokerConfigurer {
                         .securityContextRepository(securityContextRepository()))
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/portfolio", "/app/app", "/room").permitAll()
+                        .requestMatchers( "/websocket/hi", "/room", "/create", "/join").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/room/create").permitAll()
                         .requestMatchers(RegexRequestMatcher.regexMatcher("/api/room/join/[a-zA-Z0-9]{10}")).permitAll()
@@ -149,12 +149,13 @@ public class SecurityConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/portfolio").setAllowedOriginPatterns("http://192.168.178.42:[*]", "http://localhost:[*]");
+        registry.addEndpoint("/create").setAllowedOriginPatterns("http://192.168.178.42:[*]", "http://localhost:[*]");
+        registry.addEndpoint("/join").setAllowedOriginPatterns("http://192.168.178.42:[*]", "http://localhost:[*]");
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/websocket");
         config.enableSimpleBroker("/room");
     }
 
