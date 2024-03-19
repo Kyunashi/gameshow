@@ -8,7 +8,7 @@ public class Room {
 
     private String roomId;
 
-    private List<Player> players;
+    private ArrayList<Player> players;
 
     private Player gamemaster;
 
@@ -35,7 +35,7 @@ public class Room {
     }
 
 
-    public List<Player> getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 

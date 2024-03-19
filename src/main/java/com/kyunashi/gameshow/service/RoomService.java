@@ -4,13 +4,17 @@ import com.kyunashi.gameshow.dto.PlayerDto;
 import com.kyunashi.gameshow.dto.RoomDto;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.model.Room;
+import com.kyunashi.gameshow.socket.JoinRoomMessage;
+import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@CommonsLog
 public class RoomService {
 
 
@@ -29,10 +33,10 @@ public class RoomService {
 
     }
 
-    public void joinRoom(PlayerDto playerDto, String roomId) {
+    public void joinRoom(JoinRoomMessage joinRoomMessage) {
 
-        Room room = rooms.get(roomId);
-        Player player = new Player(rooms.size() + 1, playerDto.getName(), playerDto.getColor() );
+        Room room = rooms.get(joinRoomMessage.getRoomId());
+        Player player = new Player(joinRoomMessage.getName(), joinRoomMessage.getColor() );
         room.addPlayer(player);
     }
 
@@ -45,4 +49,7 @@ public class RoomService {
     }
 
 
+    public ArrayList<Player> getPlayersOfRoom(String roomId) {
+        return rooms.get(roomId).getPlayers();
+    }
 }

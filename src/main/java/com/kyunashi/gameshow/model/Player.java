@@ -3,24 +3,17 @@ package com.kyunashi.gameshow.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 //@Entity
 //@Table(name="players")
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
 public class Player {
 
 
-    int playerNumber;
-
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
-    }
 
     private String name;
 
