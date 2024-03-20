@@ -1,29 +1,31 @@
 package com.kyunashi.gameshow.model;
 
+import com.kyunashi.gameshow.dto.PlayerDto;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name="rooms")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Room {
 
-
+    @Id
     private String roomId;
 
-    private ArrayList<Player> players;
+//    @OneToOne(mappedBy = "playerId")
+//    private Player owner;
 
-    private Player gamemaster;
+    @OneToMany(mappedBy = "playerId",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "player_ids")
+    private List<Player> players;
 
-    private Player owner;
-
-    private List<Integer> minigames;
-
-    public Room(String roomId, Player owner) {
-        this.roomId = roomId;
-        this.owner = owner;
-        this.gamemaster = owner;
-        this.players = new ArrayList<>();
-        this.minigames = new ArrayList<>();
-    }
-
+    @OneToMany(mappedBy = "minigameId")
+    private List<Minigame> minigames;
 
 
     public String getRoomId() {
@@ -35,22 +37,42 @@ public class Room {
     }
 
 
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    public Player getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
-
     public void addPlayer(Player player) {
         this.players.add(player);
 
     }
 
+    public void addMinigame(Minigame minigame)  {
+        this.minigames.add(minigame);
+    }
 
+    public List<Player> getPlayers() {
+        return this.players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public void setMinigames(List<Minigame> minigames) {
+        this.minigames = minigames;
+    }
+
+    public List<PlayerDto> getPlayersAsDto() {
+        ArrayList<PlayerDto> playersDto = new ArrayList<>();
+        this.players.forEach((player) -> {playersDto.add(new PlayerDto(player.getName(), player.getColor()));});
+        return playersDto;
+    }
+
+//    public Player getOwner() {
+//        return owner;
+//    }
+//
+//    public void setOwner(Player owner) {
+//        this.owner = owner;
+//    }
+
+    public List<Minigame> getMinigames() {
+        return minigames;
+    }
 }

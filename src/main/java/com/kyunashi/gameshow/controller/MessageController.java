@@ -1,11 +1,10 @@
 package com.kyunashi.gameshow.controller;
 
 
-import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.service.RoomService;
-import com.kyunashi.gameshow.socket.CreateRoomMessage;
-import com.kyunashi.gameshow.socket.JoinRoomMessage;
-import com.kyunashi.gameshow.socket.RoomUpdate;
+import com.kyunashi.gameshow.dto.CreateRoomMessage;
+import com.kyunashi.gameshow.dto.JoinRoomMessage;
+import com.kyunashi.gameshow.dto.RoomUpdate;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.context.ApplicationListener;
@@ -21,30 +20,29 @@ import org.springframework.web.util.HtmlUtils;
 @CommonsLog
 public class MessageController implements ApplicationListener<SessionConnectedEvent> {
 
-
     public RoomService roomService;
+    private SimpMessagingTemplate simpMessagingTemplate;
+
     @MessageMapping("/join")
     @SendTo("/user/queue/room-updates")
     public RoomUpdate joinRoom(JoinRoomMessage joinRoomMessage)  {
-        roomService.joinRoom(joinRoomMessage);
+        int playerIndex = roomService.joinRoom(joinRoomMessage);
         RoomUpdate roomUpdate = new RoomUpdate();
-        roomUpdate.setContent("Hello " + HtmlUtils.htmlEscape(joinRoomMessage.getName())
-                + ", you joined room: " + joinRoomMessage.getRoomId()
-                + " as color " + joinRoomMessage.getColor());
+        roomUpdate.setPlayerIndex(playerIndex);
+        roomUpdate.setRoomId(joinRoomMessage.getRoomId());
         roomUpdate.setPlayers(roomService.getPlayersOfRoom(joinRoomMessage.getRoomId()));
         return roomUpdate;
     }
 
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/create")
     @SendTo("/user/queue/room-updates")
     public RoomUpdate createRoom(CreateRoomMessage createRoomMessage) {
-        String roomId = roomService.createRoom(new Player(createRoomMessage.getName(), createRoomMessage.getColor()));
+
+        String roomId = roomService.createRoom(createRoomMessage);
         RoomUpdate roomUpdate = new RoomUpdate();
-        roomUpdate.setContent("Hello " + HtmlUtils.htmlEscape(createRoomMessage.getName())
-                + ", you create room: " + roomId
-                + " as color " + createRoomMessage.getColor());
+        roomUpdate.setPlayerIndex(roomService.getPlayersOfRoom(roomId).size() - 1);
+        roomUpdate.setRoomId(roomId);
         roomUpdate.setPlayers(roomService.getPlayersOfRoom(roomId));
         return roomUpdate;
     }

@@ -1,55 +1,77 @@
 package com.kyunashi.gameshow.service;
 
+import com.kyunashi.gameshow.dto.CreateRoomMessage;
 import com.kyunashi.gameshow.dto.PlayerDto;
 import com.kyunashi.gameshow.dto.RoomDto;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.model.Room;
-import com.kyunashi.gameshow.socket.JoinRoomMessage;
+import com.kyunashi.gameshow.dto.JoinRoomMessage;
+import com.kyunashi.gameshow.repository.PlayerRepository;
+import com.kyunashi.gameshow.repository.RoomRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @CommonsLog
+@AllArgsConstructor
 public class RoomService {
 
 
-    // TODO DECIDE ON BEAN  / IN MEMORY / COLLECTION --> where do i need the data
-    Map<String, Room> rooms = new HashMap();
-    public String createRoom(Player owner) {
+    RoomRepository roomRepository;
+    PlayerRepository playerRepository;
+    public String createRoom(CreateRoomMessage createRoomMessage) {
         String roomId = RandomStringUtils.randomAlphanumeric(10);
 
-        while(rooms.containsKey(roomId)) {
+        while(roomRepository.existsByRoomId(roomId)) {
             roomId = RandomStringUtils.randomAlphanumeric(10);
         }
-        Room room = new Room(roomId, owner);
-        rooms.put(roomId, room);
-        RoomDto roomRes = new RoomDto();
+        Player player = new Player();
+        player.setName(createRoomMessage.getName());
+        player.setColor(createRoomMessage.getColor());
+        playerRepository.save(player);
+        Room room = new Room();
+        ArrayList<Player> players = new ArrayList<>();
+        players.add(player);
+        log.info("OWNER ID: " + player.getPlayerId());
+        log.info("PLAYERS: ");
+        for (Player player1 : players) {
+            log.info(player1.getName());
+        }
+//        room.setOwner(player);
+        room.setRoomId(roomId);
+        room.setPlayers(players);
+        roomRepository.save(room);
         return roomId;
 
     }
 
-    public void joinRoom(JoinRoomMessage joinRoomMessage) {
+    public int joinRoom(JoinRoomMessage joinRoomMessage) {
 
-        Room room = rooms.get(joinRoomMessage.getRoomId());
-        Player player = new Player(joinRoomMessage.getName(), joinRoomMessage.getColor() );
+        Room room = roomRepository.findByRoomId(joinRoomMessage.getRoomId()).get();
+
+        Player player = new Player();
+        player.setColor(joinRoomMessage.getColor());
+        player.setName(joinRoomMessage.getName());
         room.addPlayer(player);
+        roomRepository.save(room);
+        return room.getPlayers().size() - 1;
     }
 
-    public boolean deleteRoom(String roomId) {
-        if (rooms.containsKey(roomId)) {
-            rooms.remove(roomId);
-            return true;
-        }
-        return false;
-    }
+//    public boolean deleteRoom(String roomId) {
+//        if (rooms.containsKey(roomId)) {
+//            rooms.remove(roomId);
+//            return true;
+//        }
+//        return false;
+//    }
 
 
-    public ArrayList<Player> getPlayersOfRoom(String roomId) {
-        return rooms.get(roomId).getPlayers();
+    public List<PlayerDto> getPlayersOfRoom(String roomId) {
+        return roomRepository.findByRoomId(roomId).get().getPlayersAsDto();
     }
 }

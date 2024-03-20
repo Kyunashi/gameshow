@@ -1,4 +1,4 @@
-package com.kyunashi.gameshow.socket;
+package com.kyunashi.gameshow.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
