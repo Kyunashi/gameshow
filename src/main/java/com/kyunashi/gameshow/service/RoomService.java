@@ -30,21 +30,16 @@ public class RoomService {
         while(roomRepository.existsByRoomId(roomId)) {
             roomId = RandomStringUtils.randomAlphanumeric(10);
         }
+        //player
         Player player = new Player();
         player.setName(createRoomMessage.getName());
         player.setColor(createRoomMessage.getColor());
-        playerRepository.save(player);
+        // room
         Room room = new Room();
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(player);
-        log.info("OWNER ID: " + player.getPlayerId());
-        log.info("PLAYERS: ");
-        for (Player player1 : players) {
-            log.info(player1.getName());
-        }
-//        room.setOwner(player);
+        room.setOwner(player);
         room.setRoomId(roomId);
-        room.setPlayers(players);
+        room.setPlayers(Arrays.asList(player));
+//        player.setRoom(room);
         roomRepository.save(room);
         return roomId;
 

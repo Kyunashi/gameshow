@@ -17,11 +17,11 @@ public class Room {
     @Id
     private String roomId;
 
-//    @OneToOne(mappedBy = "playerId")
-//    private Player owner;
+    @OneToOne
+    private Player owner;
 
-    @OneToMany(mappedBy = "playerId",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "player_ids")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "player_ids")
     private List<Player> players;
 
     @OneToMany(mappedBy = "minigameId")
@@ -64,13 +64,13 @@ public class Room {
         return playersDto;
     }
 
-//    public Player getOwner() {
-//        return owner;
-//    }
-//
-//    public void setOwner(Player owner) {
-//        this.owner = owner;
-//    }
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
 
     public List<Minigame> getMinigames() {
         return minigames;
