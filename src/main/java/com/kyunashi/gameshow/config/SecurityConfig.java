@@ -156,7 +156,7 @@ public class SecurityConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setApplicationDestinationPrefixes("/room");
-        config.enableSimpleBroker("/user/queue/room-updates");
+        config.enableSimpleBroker("/user/queue/room-updates" , "/room");
         config.setUserDestinationPrefix("/user");
     }
 

@@ -24,14 +24,16 @@ public class MessageController implements ApplicationListener<SessionConnectedEv
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/join")
-    @SendTo("/user/queue/room-updates")
-    public RoomUpdate joinRoom(JoinRoomMessage joinRoomMessage)  {
+//    @SendTo("/user/queue/room-updates")
+    public void joinRoom(JoinRoomMessage joinRoomMessage)  {
         int playerIndex = roomService.joinRoom(joinRoomMessage);
         RoomUpdate roomUpdate = new RoomUpdate();
         roomUpdate.setPlayerIndex(playerIndex);
         roomUpdate.setRoomId(joinRoomMessage.getRoomId());
         roomUpdate.setPlayers(roomService.getPlayersOfRoom(joinRoomMessage.getRoomId()));
-        return roomUpdate;
+        String path = "/room/" + joinRoomMessage.getRoomId() + "/updates";
+        log.info("Sending message to: " + path);
+        simpMessagingTemplate.convertAndSend(path , roomUpdate);
     }
 
 
