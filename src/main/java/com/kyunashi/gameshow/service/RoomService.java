@@ -1,11 +1,8 @@
 package com.kyunashi.gameshow.service;
 
-import com.kyunashi.gameshow.dto.CreateRoomMessage;
-import com.kyunashi.gameshow.dto.PlayerDto;
-import com.kyunashi.gameshow.dto.RoomDto;
+import com.kyunashi.gameshow.dto.*;
 import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.model.Room;
-import com.kyunashi.gameshow.dto.JoinRoomMessage;
 import com.kyunashi.gameshow.repository.PlayerRepository;
 import com.kyunashi.gameshow.repository.RoomRepository;
 import lombok.AllArgsConstructor;
@@ -24,7 +21,7 @@ public class RoomService {
 
     RoomRepository roomRepository;
     PlayerRepository playerRepository;
-    public String createRoom(CreateRoomMessage createRoomMessage) {
+    public RoomConfirm createRoom(CreateRoomMessage createRoomMessage) {
         String roomId = RandomStringUtils.randomAlphanumeric(10);
 
         while(roomRepository.existsByRoomId(roomId)) {
@@ -41,11 +38,13 @@ public class RoomService {
         room.setPlayers(Arrays.asList(player));
 //        player.setRoom(room);
         roomRepository.save(room);
-        return roomId;
+        List<PlayerDto> players = getPlayersOfRoom(roomId);
+        RoomConfirm roomConfirm = new RoomConfirm(players.size() - 1, roomId, players);
+        return roomConfirm;
 
     }
 
-    public int joinRoom(JoinRoomMessage joinRoomMessage) {
+    public RoomConfirm  joinRoom(JoinRoomMessage joinRoomMessage) {
 
         Room room = roomRepository.findByRoomId(joinRoomMessage.getRoomId()).get();
 
@@ -54,7 +53,9 @@ public class RoomService {
         player.setName(joinRoomMessage.getName());
         room.addPlayer(player);
         roomRepository.save(room);
-        return room.getPlayers().size() - 1;
+        List<PlayerDto> players = getPlayersOfRoom(room.getRoomId());
+        RoomConfirm roomConfirm = new RoomConfirm(room.getPlayers().size() - 1, room.getRoomId(),players);
+        return roomConfirm;
     }
 
 //    public boolean deleteRoom(String roomId) {

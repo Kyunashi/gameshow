@@ -1,10 +1,8 @@
 package com.kyunashi.gameshow.controller;
 
 
+import com.kyunashi.gameshow.dto.*;
 import com.kyunashi.gameshow.service.RoomService;
-import com.kyunashi.gameshow.dto.CreateRoomMessage;
-import com.kyunashi.gameshow.dto.JoinRoomMessage;
-import com.kyunashi.gameshow.dto.RoomUpdate;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.context.ApplicationListener;
@@ -15,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 @CommonsLog
@@ -24,29 +25,31 @@ public class MessageController implements ApplicationListener<SessionConnectedEv
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/join")
-//    @SendTo("/user/queue/room-updates")
-    public void joinRoom(JoinRoomMessage joinRoomMessage)  {
-        int playerIndex = roomService.joinRoom(joinRoomMessage);
+    @SendTo("/user/queue/room-updates")
+    public RoomConfirm joinRoom(JoinRoomMessage joinRoomMessage)  {
+        RoomConfirm roomConfirm = roomService.joinRoom(joinRoomMessage);
+
         RoomUpdate roomUpdate = new RoomUpdate();
-        roomUpdate.setPlayerIndex(playerIndex);
-        roomUpdate.setRoomId(joinRoomMessage.getRoomId());
-        roomUpdate.setPlayers(roomService.getPlayersOfRoom(joinRoomMessage.getRoomId()));
-        String path = "/room/" + joinRoomMessage.getRoomId() + "/updates";
+        roomUpdate.setRoomId(roomConfirm.getRoomId());
+        roomUpdate.setPlayers(roomConfirm.getPlayers());
+
+        String path = "/room/" + roomConfirm.getRoomId() + "/updates";
         log.info("Sending message to: " + path);
-        simpMessagingTemplate.convertAndSend(path , roomUpdate);
+
+        // update the requesting user via room-updates, the rest via template to roomid
+        simpMessagingTemplate.convertAndSend(path, roomUpdate);
+        return roomConfirm;
+
+
     }
 
 
     @MessageMapping("/create")
     @SendTo("/user/queue/room-updates")
-    public RoomUpdate createRoom(CreateRoomMessage createRoomMessage) {
+    public RoomConfirm createRoom(CreateRoomMessage createRoomMessage) {
 
-        String roomId = roomService.createRoom(createRoomMessage);
-        RoomUpdate roomUpdate = new RoomUpdate();
-        roomUpdate.setPlayerIndex(roomService.getPlayersOfRoom(roomId).size() - 1);
-        roomUpdate.setRoomId(roomId);
-        roomUpdate.setPlayers(roomService.getPlayersOfRoom(roomId));
-        return roomUpdate;
+        RoomConfirm roomConfirm = roomService.createRoom(createRoomMessage);
+        return roomConfirm;
     }
 
 //

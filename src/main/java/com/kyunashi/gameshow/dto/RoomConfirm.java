@@ -9,10 +9,21 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomUpdate {
+public class RoomConfirm {
+
+    private int playerIndex;
+
     private String roomId;
 
     private List<PlayerDto> players;
+
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
 
     public String getRoomId() {
         return roomId;
