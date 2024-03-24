@@ -77,10 +77,11 @@ public class RoomService {
 
     @Transactional
     public void disconnectSession(String sessionId) {
-        if(roomRepository.existsBySession(sessionId)) {
-            roomRepository.deleteBySession(sessionId);
+
+        Optional<Room> room = roomRepository.findRoomBySession(sessionId);
+        if(!room.isEmpty()) {
+            roomRepository.deleteByRoomId(room.get().getRoomId());
             log.info("Delete ROom with session: " + sessionId);
-            return;
         }
     }
 
