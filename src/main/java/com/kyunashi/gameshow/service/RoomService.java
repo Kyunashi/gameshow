@@ -5,11 +5,15 @@ import com.kyunashi.gameshow.model.Player;
 import com.kyunashi.gameshow.model.Room;
 import com.kyunashi.gameshow.repository.PlayerRepository;
 import com.kyunashi.gameshow.repository.RoomRepository;
+import jakarta.transaction.Transactional;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.context.ApplicationListener;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.*;
 
@@ -21,6 +25,8 @@ public class RoomService {
 
     RoomRepository roomRepository;
     PlayerRepository playerRepository;
+
+    @Transactional
     public RoomConfirm createRoom(CreateRoomMessage createRoomMessage) {
         String roomId = RandomStringUtils.randomAlphanumeric(10);
 
@@ -44,6 +50,7 @@ public class RoomService {
 
     }
 
+    @Transactional
     public RoomConfirm  joinRoom(JoinRoomMessage joinRoomMessage) {
 
         Room room = roomRepository.findByRoomId(joinRoomMessage.getRoomId()).get();
@@ -58,16 +65,39 @@ public class RoomService {
         return roomConfirm;
     }
 
-//    public boolean deleteRoom(String roomId) {
-//        if (rooms.containsKey(roomId)) {
-//            rooms.remove(roomId);
-//            return true;
-//        }
-//        return false;
-//    }
+    @Transactional
+    public boolean deleteRoom(String roomId) {
+        if (roomRepository.existsByRoomId(roomId)) {
+            roomRepository.deleteByRoomId(roomId);
 
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public void disconnectSession(String sessionId) {
+        if(roomRepository.existsBySession(sessionId)) {
+            roomRepository.deleteBySession(sessionId);
+            log.info("Delete ROom with session: " + sessionId);
+            return;
+        }
+    }
 
     public List<PlayerDto> getPlayersOfRoom(String roomId) {
         return roomRepository.findByRoomId(roomId).get().getPlayersAsDto();
     }
+
+
+
+    public void addSessionToRoom(String sessionId, String roomId) {
+        Room room = roomRepository.findByRoomId(roomId).get();
+        if(room.getSession() == null || room.getSession().isEmpty() || room.getSession().isBlank()) {
+            room.setSession(sessionId);
+            roomRepository.save(room);
+            log.info("ADDED SESSION: " + sessionId + " TO ROOM: " + roomId);
+        }
+    }
+
+
 }

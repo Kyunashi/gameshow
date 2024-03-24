@@ -17,6 +17,7 @@ public class Player {
     private String name;
 
     private String color;
+    
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    private Room room;

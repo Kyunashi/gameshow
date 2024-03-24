@@ -27,6 +27,15 @@ public class Room {
     @OneToMany(mappedBy = "minigameId")
     private List<Minigame> minigames;
 
+    private String session;
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
+    }
 
     public String getRoomId() {
         return roomId;
