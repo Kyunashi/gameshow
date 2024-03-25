@@ -1,7 +1,7 @@
 package com.kyunashi.gameshow.service;
 
 import com.kyunashi.gameshow.dto.UserDto;
-import com.kyunashi.gameshow.model.User;
+import com.kyunashi.gameshow.data.User;
 import com.kyunashi.gameshow.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;

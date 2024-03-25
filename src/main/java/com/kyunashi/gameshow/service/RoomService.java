@@ -1,19 +1,15 @@
 package com.kyunashi.gameshow.service;
 
 import com.kyunashi.gameshow.dto.*;
-import com.kyunashi.gameshow.model.Player;
-import com.kyunashi.gameshow.model.Room;
+import com.kyunashi.gameshow.data.Player;
+import com.kyunashi.gameshow.data.Room;
 import com.kyunashi.gameshow.repository.PlayerRepository;
 import com.kyunashi.gameshow.repository.RoomRepository;
 import jakarta.transaction.Transactional;
-import jdk.jshell.spi.ExecutionControl;
 import lombok.AllArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.context.ApplicationListener;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.*;
 
@@ -51,13 +47,13 @@ public class RoomService {
     }
 
     @Transactional
-    public RoomConfirm  joinRoom(JoinRoomMessage joinRoomMessage) {
+    public RoomConfirm joinRoom(JoinRoomMessage joinRoomMessage) {
 
         Room room = roomRepository.findByRoomId(joinRoomMessage.getRoomId()).get();
 
         Player player = new Player();
-        player.setColor(joinRoomMessage.getColor());
-        player.setName(joinRoomMessage.getName());
+        player.setColor(joinRoomMessage.getPlayer().getColor());
+        player.setName(joinRoomMessage.getPlayer().getName());
         room.addPlayer(player);
         roomRepository.save(room);
         List<PlayerDto> players = getPlayersOfRoom(room.getRoomId());
@@ -78,11 +74,7 @@ public class RoomService {
     @Transactional
     public void disconnectSession(String sessionId) {
 
-        Optional<Room> room = roomRepository.findRoomBySession(sessionId);
-        if(!room.isEmpty()) {
-            roomRepository.deleteByRoomId(room.get().getRoomId());
-            log.info("Delete ROom with session: " + sessionId);
-        }
+
     }
 
     public List<PlayerDto> getPlayersOfRoom(String roomId) {
@@ -90,15 +82,6 @@ public class RoomService {
     }
 
 
-
-    public void addSessionToRoom(String sessionId, String roomId) {
-        Room room = roomRepository.findByRoomId(roomId).get();
-        if(room.getSession() == null || room.getSession().isEmpty() || room.getSession().isBlank()) {
-            room.setSession(sessionId);
-            roomRepository.save(room);
-            log.info("ADDED SESSION: " + sessionId + " TO ROOM: " + roomId);
-        }
-    }
 
 
 }

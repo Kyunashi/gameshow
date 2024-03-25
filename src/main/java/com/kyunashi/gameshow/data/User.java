@@ -1,4 +1,4 @@
-package com.kyunashi.gameshow.model;
+package com.kyunashi.gameshow.data;
 
 
 import jakarta.persistence.*;

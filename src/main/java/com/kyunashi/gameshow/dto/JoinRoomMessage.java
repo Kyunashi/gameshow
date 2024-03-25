@@ -11,9 +11,15 @@ public class JoinRoomMessage {
 
     private String roomId;
 
-    private String name;
+    private PlayerDto player;
 
-    private String color;
+    public PlayerDto getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(PlayerDto player) {
+        this.player = player;
+    }
 
     public String getRoomId() {
         return roomId;

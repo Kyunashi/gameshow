@@ -1,4 +1,4 @@
-package com.kyunashi.gameshow.model;
+package com.kyunashi.gameshow.data;
 
 import com.kyunashi.gameshow.dto.PlayerDto;
 import jakarta.persistence.*;
@@ -21,21 +21,13 @@ public class Room {
     private Player owner;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "player_ids")
     private List<Player> players;
 
     @OneToMany(mappedBy = "minigameId")
     private List<Minigame> minigames;
 
-    private String session;
 
-    public String getSession() {
-        return session;
-    }
 
-    public void setSession(String session) {
-        this.session = session;
-    }
 
     public String getRoomId() {
         return roomId;

@@ -1,8 +1,8 @@
 package com.kyunashi.gameshow.controller;
 
 import com.kyunashi.gameshow.dto.UserDto;
-import com.kyunashi.gameshow.model.SecurityUser;
-import com.kyunashi.gameshow.model.User;
+import com.kyunashi.gameshow.data.SecurityUser;
+import com.kyunashi.gameshow.data.User;
 import com.kyunashi.gameshow.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.http.HttpResponse;
 
 /**
  * Controller class to manage Endpoints regarding the user

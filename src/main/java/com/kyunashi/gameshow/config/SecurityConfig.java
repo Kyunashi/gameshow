@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableWebSocketMessageBroker
 @CommonsLog
+@EnableAsync
 @AllArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig implements WebSocketMessageBrokerConfigurer {

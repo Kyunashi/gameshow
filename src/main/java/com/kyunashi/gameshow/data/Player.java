@@ -1,9 +1,6 @@
-package com.kyunashi.gameshow.model;
+package com.kyunashi.gameshow.data;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="players")
@@ -19,8 +16,6 @@ public class Player {
     private String color;
     
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Room room;
     public String getName() {
         return name;
     }
@@ -41,13 +36,6 @@ public class Player {
         return playerId;
     }
 
-//    public Room getRoom() {
-//        return room;
-//    }
-//
-//    public void setRoom(Room room) {
-//        this.room = room;
-//    }
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;

@@ -2,7 +2,7 @@ package com.kyunashi.gameshow.service;
 
 import com.kyunashi.gameshow.dto.LoginRequest;
 import com.kyunashi.gameshow.dto.SignupRequest;
-import com.kyunashi.gameshow.model.User;
+import com.kyunashi.gameshow.data.User;
 import com.kyunashi.gameshow.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

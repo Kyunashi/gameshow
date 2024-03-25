@@ -1,6 +1,6 @@
 package com.kyunashi.gameshow.repository;
 
-import com.kyunashi.gameshow.model.User;
+import com.kyunashi.gameshow.data.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

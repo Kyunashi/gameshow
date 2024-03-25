@@ -1,6 +1,6 @@
 package com.kyunashi.gameshow.service;
 
-import com.kyunashi.gameshow.model.SecurityUser;
+import com.kyunashi.gameshow.data.SecurityUser;
 import com.kyunashi.gameshow.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
