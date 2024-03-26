@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomUpdate {
+public class RoomUpdateDto {
     private String roomId;
 
     private List<PlayerDto> players;

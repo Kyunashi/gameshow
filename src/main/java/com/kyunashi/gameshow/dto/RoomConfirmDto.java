@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomConfirm {
+public class RoomConfirmDto {
 
     private int playerIndex;
 
